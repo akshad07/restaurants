@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
+    'rest_framework',
+    'rest_framework_gis',
+    'restaurants',
 ]
 
 MIDDLEWARE = [
@@ -110,6 +115,16 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+
+# GDAL Config
+
+# Path to the GDAL library
+GDAL_LIBRARY_PATH = '/usr/lib/libgdal.so'
+GEOS_LIBRARY_PATH= '/usr/lib/libgeos_c.so'
+
+# Ensure that the GDAL_LIBRARY_PATH is an existing file
+assert os.path.exists(GDAL_LIBRARY_PATH), f"GDAL library not found at path: {GDAL_LIBRARY_PATH}"
 
 
 # Static files (CSS, JavaScript, Images)
