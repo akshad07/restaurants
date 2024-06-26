@@ -9,3 +9,4 @@ const map = L.map("map", {
   layers: [layer],
 });
 map.fitWorld();
+map.flyTo([18.817909, 76.771240], 7);

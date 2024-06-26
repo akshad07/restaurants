@@ -19,6 +19,9 @@ RUN apk add --update --no-cache \
     geos-dev \
     proj \
     proj-dev \
+    postgresql-dev \
+    gcc \
+    musl-dev \
     && rm -rf /var/cache/apk/* \
     && pip install --no-cache-dir -r requirements.txt
 
@@ -28,5 +31,11 @@ COPY . /app/
 # Expose port 8000 to the outside world
 EXPOSE 8000
 
-# Start the application
-CMD ["python", "restaurants_project/manage.py", "runserver", "0.0.0.0:8000"]
+# Set environment variables for GDAL
+ENV GDAL_DATA=/usr/share/gdal
+ENV PROJ_LIB=/usr/share/proj
+ENV GEOS_LIBRARY_PATH=/usr/lib/libgeos_c.so
+
+RUN python restaurants_project/manage.py collectstatic --noinput
+# Run migrations and start the server
+CMD ["sh", "-c", "python restaurants_project/manage.py migrate && python restaurants_project/manage.py runserver 0.0.0.0:8000"]

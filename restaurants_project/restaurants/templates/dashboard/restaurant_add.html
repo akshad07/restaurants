@@ -1,0 +1,89 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+<!-- Page header -->
+
+<!-- /page header -->
+<div class='container overflow-auto'>
+  <div class="card ms-2 me-2 mt-2 mb-5">
+    <div class="card-header py-sm-0">
+      <h3 class="pa-0 mt-2 text-center">Register New Restaurant</h3>
+    </div>
+    <div class="card-body">
+      <div class="chart-container">
+        <div id="order_plot">
+          <form method='POST'>
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-8">
+                <div class="mb-3">
+                  {{ form.name|as_crispy_field }}
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  {{ form.opentime|as_crispy_field }}
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3">
+                  {{ form.address|as_crispy_field }}
+                </div>
+              </div>
+            </div>
+
+            <div id="map" style="height: 350px;"></div>
+
+            <!-- Hidden fields for latitude, longitude, and location -->
+            <input type="hidden" id="id_latitude" name="latitude">
+            <input type="hidden" id="id_longitude" name="longitude">
+            <input type="hidden" id="id_location" name="location">
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary mt-3">Register</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include flatpickr CSS and JS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<!-- Initialize flatpickr time picker -->
+<script>
+  flatpickr("input[name='opentime']", {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true
+  });
+
+  var map = L.map('map').setView([19.7515, 75.7139], 7); // Example coordinates
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(map);
+
+  // Add a marker when user clicks on the map
+  var marker;
+  map.on('click', function(e) {
+      if (marker) {
+          map.removeLayer(marker); // Remove previous marker
+      }
+      marker = new L.Marker(e.latlng).addTo(map); // Add new marker at clicked location
+
+      // Update hidden form fields with the clicked coordinates
+      document.getElementById('id_latitude').value = e.latlng.lat;
+      document.getElementById('id_longitude').value = e.latlng.lng;
+      document.getElementById('id_location').value = `POINT(${e.latlng.lng} ${e.latlng.lat})`;
+  });
+</script>
+
+{% endblock %}

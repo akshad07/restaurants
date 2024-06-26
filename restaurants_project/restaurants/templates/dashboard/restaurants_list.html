@@ -1,0 +1,57 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="container mt-2">
+  <div class="row">
+      <div class="col-md-12 text-center">
+          <h1>Welcome to Restaurants </h1>
+          <p class="lead">Register Your Restaurant or View All Restaurants On Map</p>
+          <a href="{%url "restaurants:create_restaurant"%}"> <button type="button" class="btn btn-primary">Register Restaurant</button></a>
+          <a href="{%url "restaurants:map"%}"><button type="button" class="btn btn-secondary">View Restaurants</button></a>
+      </div>
+  </div>
+</div>
+<!-- /page header -->
+<div class="card mt-3 ms-3 me-3 mb-5 overflow-auto">
+  <div class="card-header py-sm-0">
+    <h3 class="pa-0 mt-2 text-center">Restaurants List</h3>
+    
+  </div>
+  <div class="card-body">
+    <div class="chart-container">
+      <div id="order_plot">
+
+        <div class="container mt-2 mb-2">
+          <table class="table table-hover">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Name</th>
+                <th scope="col">Open Time</th>
+                <th scope="col">Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in restaurants %}
+              <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{r.name}}</td>
+                <td>{{r.opentime}}</td>
+                <td>{{r.address}}</td>
+              </tr>
+              {% endfor %}
+              {% if not restaurants %}
+              <tr>
+                <td colspan=5 class="text-center">No restaurants</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

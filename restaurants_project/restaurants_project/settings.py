@@ -26,8 +26,9 @@ SECRET_KEY = 'django-insecure--%q@zco2iresqm4e5fc3hv1yg2c%lq#v!z1jqh23xcn!tkb*%y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Application definition
 
@@ -39,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'leaflet',
+    'crispy_forms',
+    'crispy_bootstrap4',
     'rest_framework',
     'rest_framework_gis',
     'restaurants',
@@ -80,11 +84,16 @@ WSGI_APPLICATION = 'restaurants_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'restaurants',
+        'USER': 'postgres',
+        'PASSWORD': 'Akshad1234',
+        'HOST': 'db',
+        'PORT': '5432',
     }
 }
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -130,8 +139,16 @@ assert os.path.exists(GDAL_LIBRARY_PATH), f"GDAL library not found at path: {GDA
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (51.505, -0.09),
+    'DEFAULT_ZOOM': 13,
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 18,
+    'SCALE': 'metric',
+    'ATTRIBUTION_PREFIX': 'Powered by Leaflet',
+}
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
