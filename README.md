@@ -6,7 +6,6 @@
 1. Clone the repository:
     ```sh
     git clone <repository-url>
-    cd csv_analysis_project
     ```
 
 2. Create and activate a virtual environment:
